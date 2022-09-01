@@ -1,0 +1,12 @@
+# Global ignoring of different binaries and another temporary files
+
+# Visual Studio cache and options
+.vs/
+
+# Visual Studio user settings
+*.suo
+*.user
+
+# Build results
+obj/
+bin/
