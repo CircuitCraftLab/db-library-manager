@@ -4,11 +4,16 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:l="clr-namespace:CircuitCraftLab.DbLibraryManager"
+        xmlns:vm="clr-namespace:CircuitCraftLab.DbLibraryManager.ViewModels"
         mc:Ignorable="d"
         Title="DB Library Manager"
         Height="500"
         Width="800"
         WindowStartupLocation="CenterScreen">
+    <Window.DataContext>
+        <vm:MainViewModel />
+    </Window.DataContext>
+
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
