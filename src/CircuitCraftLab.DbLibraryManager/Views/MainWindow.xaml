@@ -23,7 +23,8 @@
         <Menu Grid.Row="0">
             <MenuItem Header="Файл">
                 <MenuItem Header="Открыть"
-                          InputGestureText="Ctrl+O" />
+                          InputGestureText="Ctrl+O"
+                          Command="{Binding Path=OpenFileCommand}" />
                 <MenuItem Header="Сохранить"
                           InputGestureText="Ctrl+S" />
                 <MenuItem Header="Закрыть" />
