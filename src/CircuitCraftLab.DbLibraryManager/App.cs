@@ -1,5 +1,7 @@
 using System.Windows;
 
+using CircuitCraftLab.DbLibraryManager.Views;
+
 namespace CircuitCraftLab.DbLibraryManager;
 
 public class App : Application {

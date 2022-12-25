@@ -3,6 +3,8 @@ using System;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 
+using CircuitCraftLab.DbLibraryManager.Views;
+
 namespace CircuitCraftLab.DbLibraryManager;
 
 public class Program {
