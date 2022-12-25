@@ -2,48 +2,73 @@ name: 'Build application'
 
 on:
   push:
-    branches: [ "**" ]
+    branches:
+      - '**'
+    paths:
+      - '.github/workflows/**'
+      - 'src/**'
+      - '*.sln'
+      - '*.props'
   pull_request:
-    branches: [ "**" ]
+    branches:
+      - '**'
+    paths:
+      - '.github/workflows/**'
+      - 'src/**'
+      - '*.sln'
+      - '*.props'
+
+defaults:
+  run:
+    shell: pwsh
 
 jobs:
-  build-all:
-    name: "Building"
+  publish:
+    name: 'Publishing'
 
     strategy:
       matrix:
-        system-images: [ windows-latest ]
-        platforms: [ win-x86, win-x64, win7-x86, win7-x64 ]
+        system:
+          - windows-latest
+        platform: 
+          - win-x86
+          - win-x64
+          - win7-x86
+          - win7-x64
+        config:
+          - Release
 
-    runs-on: ${{ matrix.system-images }}
+    runs-on: ${{ matrix.system }}
 
     env:
-      Solution: DbLibraryManager.sln
+      Project: src\CircuitCraftLab.DbLibraryManager\CircuitCraftLab.DbLibraryManager.csproj
 
     steps:
-    - name: Checkout
-      uses: actions/checkout@v3
-      with:
-        fetch-depth: 0
+      - name: Checkout
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
 
-    - name: Cancel previous runs
-      uses: n1hility/cancel-previous-runs@v2
-      with:
-        token: ${{ secrets.GITHUB_TOKEN }}
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v2
+        with:
+          dotnet-version: 6.0.x
 
-    - name: Install .NET
-      uses: actions/setup-dotnet@v2
-      with:
-        dotnet-version: 6.0.x
+      - name: Publish application
+        run: |
+          dotnet publish $env:Project `
+            --configuration ${{ matrix.config }} `
+            --runtime ${{ matrix.platform }} `
+            --self-contained true `
+            -p:PublishSingleFile=true `
+            -p:IncludeAllContentForSelfExtract=true `
+            -p:EnableCompressionInSingleFile=true `
+            -p:PublishReadyToRun=true `
+            -p:DebugSymbols=false `
+            -p:DebugType=None
 
-    - name: Publishing application
-      run: |
-        dotnet publish $env:Solution -c Release -p:PublishSingleFile=true -r ${{ matrix.platforms }} --self-contained true -p:IncludeAllContentForSelfExtract=true -p:PublishReadyToRun=true -p:EnableCompressionInSingleFile=true
-      env:
-        Configuration: ${{ matrix.configuration }}
-
-    - name: Upload artifacts
-      uses: actions/upload-artifact@v3
-      with:
-        name: publish-${{ matrix.platforms }}
-        path: bin/Release/${{ matrix.platforms }}/publish/
+      - name: Upload artifacts
+        uses: actions/upload-artifact@v3
+        with:
+          name: dblibrarymanager-${{ matrix.platform }}-${{ github.sha }}
+          path: bin/${{ matrix.config }}/${{ matrix.platform }}/publish/
