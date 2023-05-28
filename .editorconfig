@@ -23,7 +23,7 @@ indent_style = space
 insert_final_newline = true
 
 # XML-based files
-[*.{props,targets,resx,xaml}]
+[*.{props,targets,resx,xml,xaml,axaml,manifest}]
 
 # Common settings
 charset = utf-8

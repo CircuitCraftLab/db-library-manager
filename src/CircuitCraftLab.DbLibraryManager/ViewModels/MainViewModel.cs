@@ -1,38 +1,47 @@
 using System.Collections.Generic;
+using System.Linq;
 
-using Microsoft.Win32;
+using Avalonia.Controls;
+
+using IniFile;
 
 using ImeSense.Helpers.Mvvm.ComponentModel;
 using ImeSense.Helpers.Mvvm.Input;
 
-using IniFile;
-
 namespace CircuitCraftLab.DbLibraryManager.ViewModels;
 
 public class MainViewModel : ObservableObject {
-    private void OpenFileAction() {
+    private IRelayCommand? _openFileCommand;
+
+    private async void OpenFileActionAsync() {
         var openDialog = new OpenFileDialog {
-            DefaultExt = "DbLib",
-            Filter = "Altium Database Library File (*.DbLib)|*.DbLib|All files (*.*)|*.*",
-            Title = "Open database library file"
+            Title = "Open database library file",
+            Filters = new List<FileDialogFilter>() {
+                 new FileDialogFilter() {
+                    Name = "Altium Database Library File (*.DbLib)",
+                    Extensions = new List<string> {
+                        "DbLib"
+                    },
+                },
+            },
+            AllowMultiple = false,
         };
 
-        var dialogResult = openDialog.ShowDialog() ?? false;
-        if (!dialogResult) {
+        var result = await openDialog.ShowAsync(Helpers.GetMainWindow());
+        if (result is null) {
             return;
         }
 
         var list = new List<string>();
-        var config = new Ini(openDialog.FileName);
+        var config = new Ini(result.FirstOrDefault());
         foreach (var section in config) {
             list.Add("[" + section.Name + "]");
-
             foreach (var item in section) {
                 list.Add(item.Name + "=" + item.Value);
             }
         }
     }
 
-    private IRelayCommand? _openFileCommand;
-    public IRelayCommand OpenFileCommand => _openFileCommand ??= new RelayCommand(OpenFileAction);
+    public IRelayCommand OpenFileCommand =>
+        _openFileCommand ??= new RelayCommand(OpenFileActionAsync);
 }

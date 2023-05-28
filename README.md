@@ -1,4 +1,5 @@
 # DB Library Manager
+
 This project was created to simplify the administration of a database component library for Altium Designer. This approach is the most convenient and least expensive for workstation resources.Initially, AD does not have a tool to populate the component library database. To date, there is already a library administration system - Concord Pro(ex. Vault), but it requires significant computer resources and is very slow. This approach requires a separate server to run and is completely unsuitable for a single developer or small team.
 
 The basis of the DBMS for libraries is Microsoft Access. You can open an existing database or create a new one. When adding an existing database, a check will be made for the presence of required fields in each table.

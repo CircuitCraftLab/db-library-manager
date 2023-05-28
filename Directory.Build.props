@@ -3,12 +3,5 @@
         <ProjectDir>$(MSBuildThisFileDirectory)</ProjectDir>
         <BaseIntermediateOutputPath>$(MSBuildThisFileDirectory)obj\$(MSBuildProjectName)\</BaseIntermediateOutputPath>
         <BaseOutputPath>$(MSBuildThisFileDirectory)bin\</BaseOutputPath>
-        <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
-        <AppendRuntimeIdentifierToOutputPath>false</AppendRuntimeIdentifierToOutputPath>
-    </PropertyGroup>
-
-    <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|AnyCPU'">
-        <DebugSymbols>false</DebugSymbols>
-        <DebugType>None</DebugType>
     </PropertyGroup>
 </Project>

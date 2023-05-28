@@ -1,23 +1,21 @@
 using System;
 
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Hosting;
-
-using CircuitCraftLab.DbLibraryManager.Views;
+using Avalonia;
 
 namespace CircuitCraftLab.DbLibraryManager;
 
 public class Program {
-    [STAThread]
-    public static void Main(string[] args) {
-        var host = Host.CreateDefaultBuilder(args)
-            .ConfigureServices(services => {
-                services.AddSingleton<App>();
-                services.AddSingleton<MainWindow>();
-            })
-            .Build();
+    // Avalonia configuration, don't remove; also used by visual designer
+    public static AppBuilder BuildAvaloniaApp() =>
+        AppBuilder.Configure<App>()
+            .UsePlatformDetect()
+            .LogToTrace();
 
-        var app = host.Services.GetService<App>();
-        app?.Run();
-    }
+    // Initialization code. Don't use any Avalonia, third-party APIs or any
+    // SynchronizationContext-reliant code before AppMain is called:
+    // things aren't initialized yet and stuff might break
+    [STAThread]
+    public static void Main(string[] args) =>
+        BuildAvaloniaApp()
+            .StartWithClassicDesktopLifetime(args);
 }
