@@ -1,17 +1,27 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
 using Avalonia.Controls;
 
-using IniFile;
+using Microsoft.Extensions.DependencyInjection;
 
 using ImeSense.Helpers.Mvvm.ComponentModel;
 using ImeSense.Helpers.Mvvm.Input;
 
+using IniFile;
+
+using CircuitCraftLab.DbLibraryManager.Views;
+
 namespace CircuitCraftLab.DbLibraryManager.ViewModels;
 
 public class MainViewModel : ObservableObject {
+    private readonly IServiceProvider _serviceProvider;
     private IRelayCommand? _openFileCommand;
+
+    public MainViewModel(IServiceProvider serviceProvider) {
+        _serviceProvider = serviceProvider;
+    }
 
     private async void OpenFileActionAsync() {
         var openDialog = new OpenFileDialog {
@@ -27,7 +37,8 @@ public class MainViewModel : ObservableObject {
             AllowMultiple = false,
         };
 
-        var result = await openDialog.ShowAsync(Helpers.GetMainWindow());
+        var result = await openDialog.ShowAsync(_serviceProvider
+            .GetRequiredService<MainWindow>());
         if (result is null) {
             return;
         }
