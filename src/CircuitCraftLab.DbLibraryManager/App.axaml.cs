@@ -17,23 +17,24 @@ public partial class App : Application {
     private readonly IServiceProvider _serviceProvider = null!;
 
     public App() {
-        var services = new ServiceCollection();
-
-        services.AddSingleton<MainViewModel>();
-        services.AddSingleton<MainWindow>();
-
-        _serviceProvider = services.BuildServiceProvider();
+        _serviceProvider = new ServiceCollection()
+            .AddViews()
+            .AddViewModels()
+            .BuildServiceProvider();
     }
 
     public override void Initialize() => AvaloniaXamlLoader.Load(this);
 
     public override void OnFrameworkInitializationCompleted() {
         if (ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop) {
-            // Line below is needed to remove Avalonia data validation.
-            // Without this line you will get duplicate validations from both Avalonia and CT
-            ExpressionObserver.DataValidators.RemoveAll(x => x is DataAnnotationsValidationPlugin);
-            desktop.MainWindow = _serviceProvider.GetRequiredService<MainWindow>();
-            desktop.MainWindow.DataContext = _serviceProvider.GetRequiredService<MainViewModel>();
+            // Remove Avalonia data validation
+            ExpressionObserver.DataValidators
+                .RemoveAll(x => x is DataAnnotationsValidationPlugin);
+
+            desktop.MainWindow = _serviceProvider
+                .GetRequiredService<MainWindow>();
+            desktop.MainWindow.DataContext = _serviceProvider
+                .GetRequiredService<MainViewModel>();
         }
 
         base.OnFrameworkInitializationCompleted();

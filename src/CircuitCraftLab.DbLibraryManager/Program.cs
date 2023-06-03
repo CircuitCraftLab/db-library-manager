@@ -5,15 +5,19 @@ using Avalonia;
 namespace CircuitCraftLab.DbLibraryManager;
 
 public class Program {
-    // Avalonia configuration, don't remove; also used by visual designer
+    /// <summary>
+    /// Avalonia configuration, also used by visual designer
+    /// </summary>
+    /// <returns></returns>
     public static AppBuilder BuildAvaloniaApp() =>
         AppBuilder.Configure<App>()
             .UsePlatformDetect()
             .LogToTrace();
 
-    // Initialization code. Don't use any Avalonia, third-party APIs or any
-    // SynchronizationContext-reliant code before AppMain is called:
-    // things aren't initialized yet and stuff might break
+    /// <summary>
+    /// Initialization code
+    /// </summary>
+    /// <param name="args"></param>
     [STAThread]
     public static void Main(string[] args) =>
         BuildAvaloniaApp()
